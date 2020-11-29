@@ -1006,7 +1006,7 @@ Una classe non può anticipare il tipo di oggetti che deve creare.
 
 ###### Soluzione 1 (Migliore)
 
-Le sottoclassi definisconol’implementazione
+Le sottoclassi definiscono l’implementazione
 =>Si usa un metodo abstract protected che sarà implementato sulla **sottoclasse**
 ![img](img/FactoryMethod.png)
 
@@ -1050,7 +1050,12 @@ public class ShapeFactory {
 
 ## Abstract Factory
 
-TODO
+Il pattern AF permette di definire una interfaccia Factory che garantisce che sia possibile generare classi di tipoligia diverse in base al tipo dinamico.
+Il client avrà una AF, passata come parametro e non dipenderà quindi dall'implementazione.
+![img](img\abstractFactory.png)
+
+In base all'interface "FornitureFactory" noi abbiamo definito una interfaccia di factory in grado di tornare diverse tipologie di oggetti in base al tipo dinamico delle factory.
+E' possibile ampliare questo creando anche un produttore di factory (facoltativo)
 
 ## Singleton
 
@@ -1093,10 +1098,82 @@ public class Singleton{
 
 ## Adapter
 
-TODO
+L'adapter permette di adattare l'uso di una classe al comportamento che si aspetta un Client. Il client userà un'instanza di ClientInterface che, implementanta in Adapter, permetterà di rendere compatibili il client con il service.
+Questa soluzione permette anche di disaccopiare client e service.
+![img](img\adapter.png)
 
 ## Proxy
 
-TODO
+Il pattern Proxy permette di evitare l'istanziazione di oggetti pesanti inutilmente ponendosi da interfaccia per cui accedere all'oggetto pesante e facendo da cache o da pre/post-processing
+Il client userà l'interfaccia proxy che implementa la service interface ed è aggregazione di Service (contiene al suo interno Service)
+![img](img\proxy.png)
+Esempio
+<img src="img\proxy2.png" height=200>
+
+```Java
+public class ProxyImage implements Image{
+  private RealImage img;
+  private String name;
+  public ProxyImage(String name){
+    this.name=name;
+  }
+  public void dispaly(){
+    if(img==null)//Caricata solo una volta e non sempre
+      img=new RealImage(name);
+    img.display();
+  }
+}
+```
 
 ## Decorator
+
+Aiuta a decorare e aggiungere funzionalità a classi **senza** modificare la classe.
+Questo porta a 2 vantaggi:
+
+- Non si viola l'open/closed principle per la classe
+- Si può non aver accesso alla classe per aggiungere funzionalità
+  <img src="img/decorator.png" height=300>
+
+Impiegato è la classe base, ingegnere una classe che implementa impiegato e lavoratore responsabili è il decorator
+
+```Java
+public class Engineer implements Employee{
+  //Stuff
+}
+
+public abstract class Responsability implements Employee{
+  Employee base; //Elemento base su cui si costruisce a strati le responsabilità
+  public Responsability(Employee base){
+    this.base=base;
+  }
+  public String getName(){
+    return base.getName();
+  }
+  public String getOffice(){
+    return base.getOffice();
+  }
+  public String getDescription(){
+    return base.getDescription()+this.getResponsabilityDescription();
+  }
+  public abstract String getResponsabilityDescription();
+}
+
+public class ManagerResponsability extends Responsability{
+  public ManagerResponsability(Employee c){
+    super(c);
+  }
+  public String getResponsabilityDescription(){
+    return "manager";
+  }
+}
+
+public class Main{
+  public void main(String[] args){
+    Engineer e=new Engineer();
+    ManagerResponsability mr=new ManagerResponsability(e);
+
+    mr.getDescription(); //Return e.getDescription +  "manager"
+  }
+}
+
+```
