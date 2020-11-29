@@ -242,12 +242,12 @@ Shape s2=new Shape(); //ERRATO
 
 ### Interface
 
-Le interface permettono di definire tutti i metodi pubblici che una classe deve **per forza** implementare, può contenere anche varaibili final o STATIC<br>
+Le interface permettono di definire tutti i metodi pubblici che una classe deve **per forza** implementare, può contenere anche variabili final o STATIC<br>
 Si possono implementare più interface `implements IShape,IShape2`
 
 ```Java
 public interface IShape{
-  int perimeter(){}
+  int perimeter(){} //DEVE CONTENERE ANCHE EVENTUALI THROWS
 }
 public class Shape implements IShape{
   public int perimeter(){
@@ -845,7 +845,114 @@ Non avviene se serializzati in due stream diverse
 
 ## RMI
 
-TODO -> Middleware
+RMI agisce come middleware e permette, tramite una semplice chiamata a metodo di interagire con oggetti remoti come se fossero nella stessa JVM.
+
+### Oggetti RMI
+
+- Oggetto remoto: Oggetto su cui eseguire le chiamate a metodo
+- Interfaccia remota: Dichiara quali metodi sono chiamabili da una diversa JVM
+- Server: Insieme di uno o più oggetti che implementando le interfacce remote offrono risorse
+- Remote Method Invocation: Invocazione metodo remoto
+
+### Come funziona
+
+Il client colloquia con un proxy locale del server detto **stub** che si preoccupa di forwardare le richieste.
+
+#### RMI Registry
+
+Si occupa di fornire al client lo stub richiesto.
+
+#### Implementazione classe remota
+
+##### Interfaccia remota
+
+Le interfacce di oggetti condivisi devono estendere **Remote**
+
+```Java
+public interface PriceI extends Remote{
+  public int getPrice(int qty);
+}
+```
+
+##### Classe remota
+
+La classe deve implementare l'interfaccia condivisa e estendere UnicastRemoteObject che rende accessibile da remoto l'oggetto
+->Attenzione: **È obbligatorio gestire le eccezioni che possono essere causate da una chiamata ad oggetto remoto dal client**
+
+```Java
+public class Price extends UnicastRemoteObject implements PriceI{
+  public int getPrice(int qty){ return qty*10;}
+}
+```
+
+#### Pubblicazione oggetto remoto
+
+Il registro RMI deve sempre essere online prima della pubblicazione dell'oggetto (di default localhost alla porta 1099)
+
+```Java
+import java.rmi.registry.LocateRegistry;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+public class Main{
+  public static void main(String[] args) throws RemoteException,MalformedURLException{
+    Price priceInstance=new Price();
+    //Create registry on local host
+    LocateRegistry.createRegistry(1099);//Port as argument throw RemoteException
+     //The first argument must be //host:port/name (default port is 1099)
+    Naming.rebind("rmi://127.0.0.1/chat",priceInstance);//throw MalformedURLException
+
+    //Now the class is accessable in remote
+  }
+}
+```
+
+Metodo alternativo
+
+```Java
+Registry registry= LocateRegistry.getRegistry();
+registry.bind("priceInstance", priceInstance);
+```
+
+#### Accesso all'oggetto remoto
+
+L'accesso avviene solo tramite interface poichè il client **NON** conosce l'implementazionev vera e propria remota
+
+```Java
+public class MainClient{
+  public static void main(String[] args) throws NotBoundException,MalformedURLException,RemoteException{
+    //Return a reference (stub) for remote object as remote interface
+    PriceI priceInstance=(PriceI) Naming.lookup("rmi://127.0.0.1/chat");
+
+    System.out.println(priceInstance.getPrice(10)); //>> 100
+  }
+}
+```
+
+Metodo alternativo con registry in locale
+
+```Java
+Registry registry= LocateRegistry.getRegistry();
+PriceI centralWarehouse = (PriceI) registry.lookup("priceInstance");
+```
+
+###### Naming.rebind
+
+```Java
+public static void rebind(String name,
+          Remote obj)
+                   throws RemoteException,
+                          MalformedURLException
+```
+
+###### Naming.lookup
+
+```Java
+public static Remote lookup(String name)
+                     throws NotBoundException,
+                            MalformedURLException,
+                            RemoteException
+```
 
 ## UML
 
@@ -1177,3 +1284,87 @@ public class Main{
 }
 
 ```
+
+## Observer
+
+Il pattern permette di notificare 1 o + oggetti (observer) di una modifica avvenuta su un determinato oggetto (Client)
+Ruoli:
+
+- Subject: Chi gestisce e toglie gli observer
+- Observer: Chi è interessato ad osservare
+- Client: Oggetto osservato
+
+Il subject ha 3 metodi importanti:
+
+- registerObserver(observer) che permette di aggiungere un observer
+- unregisterObserver(observer) che permette di rimuovere un oggetto
+- notifyObservers() che permette di notificare tutti gli observer di un avvenuta modifica al client (oggetto osservato implementato dentro a Subject, ovvero Client è una extends di Observable o client autonomamente notifica ad una istanza di Subject)
+  <img src="img\observerUpdate.png" height=250/>
+
+## Strategy
+
+Esistono algoritmi intercambiabili tra di loro in modo trasparente al client a **RUN-TIME**
+Si creano quindi 2 classi, la classe **Context** che deve avere un attributo per gestire la strategy attualmente in uso e le classi **Strategy**
+
+<img src="img\strategy.png" height=250 />
+
+```Java
+public class Context{
+  private Strategy str;
+  public Context(Strategy str){
+    this.str=str;
+  }
+  public int executeStrategy(int n1,int n2){
+    return str.doOperation(n1,n2);
+  }
+}
+
+public class Add implements Strategy{
+  public int doOperation(int n1,int n2){
+    return n1+n2;
+  }
+}
+```
+
+## State
+
+Il Pattern state permette ad un oggetto di cambiare il suo comportamento in base al suo stato interno.
+Correlato strettamente ad una FSA, ovvero, l'oggetto è la rappresentazione di una FSA ed è quindi necessario cambiare il suo comportamento in base allo stato in cui si trova
+Una classe per ogni stato:
+<img src="img\fsa.png" height=250 />
+
+<img src="img\state.png" height=250>
+
+```Java
+
+public class Door{
+  DoorState state;
+  public Door(){
+    state=new Closed(this);
+  }
+  //stuff
+  public void touch(){
+    state.touch();
+  }
+}
+public class Closed implements DoorState{
+  Door d;
+  public Closed(Door d){
+    this.d=d;
+  }
+  //other method
+  public void touch(){
+    d.setState(new Opening(d));
+  }
+}
+
+```
+
+## MVC
+
+Si basa su tre componenti:
+
+- Model: Fornisce accesso ai dati
+- View: Fornisce un modo per visualizzare i dati e si occupa dell'interazione con gli utenti
+- Controller: Implementa la logica di business e fa da ponte tra view e model
+  <img src="img\MVC.png" height=250 />
