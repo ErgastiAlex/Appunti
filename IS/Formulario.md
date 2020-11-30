@@ -17,7 +17,13 @@ Per i tipi primitivi che hanno il corrispettivo Obj il boxing (`Integer i=5;`) e
 
 ##### String
 
-TODO STRING METHOD
+| Metodo                  | Descrizione                                                                                                  | Return Type |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------ | ----------- |
+| s.charAt(integer)       | Return char at index                                                                                         | char        |
+| s1.compareTo(s2)        | return: <ul><li>Valori negativi se s1< s2 </li><li>Valori positivi se s1> s2 </li><li>0 se s1==s2 </li></ul> | Int         |
+| s1.equals(s2)           | Check if 2 string are equals                                                                                 | boolean     |
+| s1.equalsIgnoreCase(s2) | Check if 2 string are equals, case ignored                                                                   | boolean     |
+| s1.length()             | Return the length                                                                                            | int         |
 
 ##### StringBuffer
 
@@ -128,7 +134,14 @@ public class NomeClasse{
 
 ### Ereditarietà
 
-TODO: Extends and Implements
+**Attenzione**
+Nel casi si volesse estendere una classe e implementare una interfaccia, è necessario seguire l'ordine
+
+```Java
+public class CF extends CP implements I1,I2,I3{
+
+}
+```
 
 ```Java
 public class Padre{}
@@ -166,7 +179,7 @@ public class Figlio extends Padre{
 In Java si distingue tra **tipo statico** e **tipo dinamico**
 
 ```Java
-Padre p=new Figlio();; //Tipo statico Padre, tipo dinamico Figlio
+Padre p=new Figlio(); //Tipo statico Padre, tipo dinamico Figlio
 ```
 
 I metodi che possono essere chiamati sono quelli contenuti nel tipo statico _Padre_, ma, l'implementazione chiamata è quella di _Figlio_
