@@ -129,3 +129,126 @@ TODO
 ## Componenti
 
 TODO
+
+## Riduzione macchina completamente definita
+
+### Similitudine
+
+TODO
+
+## Riduzione macchina non definita
+
+### Compatibilità tra stati
+
+Due stati sono compatibili se:
+
+- Hanno la **stessa uscita** e **almeno uno stato di arrivo -(DC)**
+  Es:$A \lor B$
+
+  $$
+  \begin{array}{|l|l|l|}
+   & 1 & 2\\
+  \hline
+  A &  B/0 & -/1 \\
+  B & -/0 &  C/1\\
+  \end{array}
+  $$
+
+- Hanno **almeno una uscita -(DC)** e **stesso stato di arrivo**
+  Es:$A \lor B$
+
+  $$
+  \begin{array}{|l|l|l|}
+   & 1 & 2\\
+  \hline
+  A &  B/- & C/1 \\
+  B & B/0 &  C/-\\
+  \end{array}
+  $$
+
+- Hanno **uscita uguale o almeno una -(DC)** e **almeno uno stato -(DC)**
+  Es:$A \lor B$
+  $$
+  \begin{array}{|l|l|l|}
+   & 1 & 2\\
+  \hline
+  A &  B/- & -/- \\
+  B & -/0 &  C/1\\
+  \end{array}
+  $$
+
+Es di compatibilità condizionata $A \lor B\ se\ C \lor D$
+
+$$
+\begin{array}{|l|l|l|}
+ & 1 & 2\\
+\hline
+A &  C/- & -/1 \\
+B & D/0 &  C/1\\
+\end{array}
+$$
+
+### Classi prime
+
+$C_i$ non è prima se $\exists C_j\ t.c.\ S_i\subseteq{S_j}\ \land V_j\subseteq{V_i}$
+
+## Creazione circuiti sequenziali
+
+Passi:
+
+1. Trovo le funzioni di stato prossimo $q_i^*$
+2. Scrivo la tabella di transizione di stato prossimo
+3. Trovo eventuali stati non raggiungibili
+4. Minimizzo
+5. Scrivo le nuove funzioni di stato prossimo con gli stati minimizzati
+6. Scrivo le funzioni di eccitazioni in base al bistabile scelto (es: Per JK trovo i valori di J e K dato $q_i$ e $x_i$)
+7. Disegno lo schema
+
+#### Funzioni di stato prossimo
+
+Ricavate tramite la tabella di eccitazione, con un abuso di notazione, considerando e calcolando gli implicanti per valori di stato prossimo ad 1 e moltiplicando gli implicanti che portano in una variazione di $Q$ ($Q$ o $\overline{Q}$) per quella variazione (Vedere T)
+
+**Bistabile D**
+
+$$
+\begin{array}{|l|l|}
+D & Q^*\\
+\hline
+0 & 0 \\
+1 & 1\\
+\end{array}
+\newline
+Q^*=D
+$$
+
+**Bistabile T**
+
+$$
+\begin{array}{|l|l|}
+T & Q^*\\
+\hline
+0 & Q \\
+1 & \overline{Q}\\
+\end{array}
+\newline[0.1in]
+q^*=\overline{T}*Q+T*\overline{Q}
+\newline[0.1in]
+q^*=T \oplus q
+$$
+
+**Bistabile JK**
+
+$$
+\begin{array}{|l|l|l|}
+J&K & Q^*\\
+\hline
+0&0 & Q \\
+0&1 & 0\\
+1&0 & 1\\
+1&1 & \overline{Q}\\
+\end{array}
+\newline[0.1in]
+q^*=\overline{j}*\overline{k}*Q+j*\overline{k}+j*k*\overline{Q}
+\newline[0.1in]
+q^*=\overline{j}*\overline{k}*Q+j*\overline{k}+j*k*\overline{Q}
+$$
