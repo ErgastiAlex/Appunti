@@ -1381,3 +1381,186 @@ Si basa su tre componenti:
 - View: Fornisce un modo per visualizzare i dati e si occupa dell'interazione con gli utenti
 - Controller: Implementa la logica di business e fa da ponte tra view e model
   <img src="img\MVC.png" height=250 />
+
+## JML (Java Modeling Language)
+
+Specificare cosa un metodo fa, senza dire come
+
+Sintassi JML:
+
+| Keywords                   | Descrizione                                                                                                               |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| requires                   | Indica la precondizione (se omessa true)                                                                                  |
+| ensures                    | Indica la postcondizione (come si deve trovare il sistema dopo l'esecuzione ed eventualmente il \result) (se omessa true) |
+| signals(Eccezione e)       | Indica la postcondizione eccezionale (E' possibile usare l'eccezzione (e)nella clausola signals)                          |
+| assignable nomevariabile   | Definisce quali variabili sono modificabili                                                                               |
+| assignable \nothing        | Definisce che nessuna variabile è modificabile                                                                            |
+| [private/public] invariant | Definisce una proprietà invariante della classe                                                                           |
+
+Espressione JML:
+
+- **NON** possono esserci side effect, ma solo condizione booleane
+- Precedute da opportune keywords
+- Contenute in **//@** oppure **/\*@ @\*/**
+
+Ulteriori notazione JML:
+
+| Notazione      | Descrizione                                                                |
+| -------------- | -------------------------------------------------------------------------- |
+| (\*commento\*) | È possibile usare un commento nelle formule, valutato sempre come **true** |
+| \result        | Identifica il valore di ritorno del metodo                                 |
+| \old(valore)   | Indica il valore della variabile all'entrata del metodo                    |
+| a ==> b        | a implica b                                                                |
+| a <== b        | b implica a                                                                |
+| a \<==> b      | a sse b                                                                    |
+
+Quantificatori:
+
+| Notazione                                        | Descrizione                                                                                                          |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| \forall \<declaration>;\<range-exp>;\<body-exp>  | Quantificatore universale **Restituisce True o False**                                                               |
+| \exists \<declaration>;\<range-exp>;\<body-exp>  | Quantificatore esistenziale **Restituisce True o False**                                                             |
+| \sum \<declaration>;\<range-exp>;\<body-exp>     | Somma la body-exp **Va usato insieme ad una espressione booleana come ==; <;>;<=;>=;!=**                             |
+| \product \<declaration>;\<range-exp>;\<body-exp> | Moltiplica la body-exp **Va usato insieme ad una espressione booleana come ==; <;>;<=;>=;!=**                        |
+| \min \<declaration>;\<range-exp>;\<body-exp>     | Restituisce il minimo della body-exp **Va usato insieme ad una espressione booleana come ==; <;>;<=;>=;!=**          |
+| \max \<declaration>;\<range-exp>;\<body-exp>     | Restituisce il max della body-exp **Va usato insieme ad una espressione booleana come ==; <;>;<=;>=;!=**             |
+| \num_of \<declaration>;\<range-exp>;\<body-exp>  | Conta gli elementi che rispettano la body-exp **Va usato insieme ad una espressione booleana come ==; <;>;<=;>=;!=** |
+
+Es:
+
+```Java
+//@ requires in>=0;
+/*@ ensures \result>=0 && Math.abs(\result * \result - in)< 0.1 &&
+(*se la radice fornisce un risulato corretto al più per uno scarto di 0.1, è accettato*);
+@*/
+public static float sqrt(float in);
+
+//@ensures p.accesa() <==> \old(p.accesa)==false
+//La lampada è accesa sse era spenta -> Il metodo inverte l'accensione
+```
+
+### Operazione parziali
+
+I metodi parziali non definiscono in che modo si comportano i metodi se le precondizioni non sono verificate=> Specifica parziale
+=> Si utilizzano le eccezioni e si rimuove la clausola Requires utilizzando al suo posto eccezioni lanciate quando le condizioni standard non sono verificate
+
+**Buona norma di programmazione**: La clausola ensures ha al suo interno la negazione di tutte le eccezioni
+Es:
+
+```Java
+//@ ensures n>=0 && (\product int i; 0<i && i<=n; i)==\result
+//@ signals (NegativeNumberException e) x<0
+public int fact(int n);
+```
+
+### JML con le classi
+
+#### ADT
+
+Un ADT (Abstract Data Type) è un modello su cui sono stati descritti le operazioni che si possono eseguire e i valori che può assumere.
+La specifica definisce quindi cosa si possa fare sull'ADT ma non come questo venga fatto.
+
+Le pre e post-condizioni di un metodo pubblico (non statico) possono quindi accedere **SOLO** agli elementi pubblici della classe:
+
+- Metodi pubblici puri (**solo puri**)
+- Attributi pubblici
+
+Note: I metodi statici non possono essere puri e i metodi puri possono chiamare solo altri metodi puri
+
+##### Metodi puri
+
+Un metodo è puro se **NON** ha effetti collaterali.
+Si può definire tramite
+
+```Java
+ //@assignable \nothing
+
+ //oppure
+
+ public /*@ pure @*/ void Foo(){}
+```
+
+##### Public invariant
+
+È una condizione che deve essere sempre verificata sull'oggetto astratto, possono usare solo attributi e metodi public e ignorano l'implementazione, ma considerano la specifica
+
+```Java
+//@ public invariant this.size()>=0
+```
+
+#### Rappresentazione
+
+Fornisce l'implementazione
+$$AF:StatoConcreto \rightarrow StatoAstratto$$
+La funzione AF associa ad ogni stato concreto uno astratto, è tendenzialmente non iniettiva, poichè più stati concreti possono rappresentare lo stesso stato astratto
+Si implementa tramite toString(), che offre ritorna lo stato astratto della macchina sotto forma testuale
+Es:[1,2] e [2,1] rappresentano entrambi il set {1,2}
+
+##### Private Invariant
+
+Si può usare un invariante privato per mantere costrizioni sull'implementazione o per mettere in relazione parti private e metodi osservatori. (Specificazione della AF)
+Es:
+
+```Java
+//Se isIn restituisce true, allora elements (privato) deve contenere i
+//@ private invariant \forall int i;; this.isIn(i) <==> elements.contains(i);
+```
+
+Note: Mai esporre parti mutabili del REP!
+
+#### Estensioni di classi
+
+##### Estensioni pure
+
+Un estensione è detta pura se **non** modifica le specifiche dei metodi ereditati, li può modificare ma lasciando inalterata la specifica
+
+##### Rep Invariant
+
+Il Rep è ereditato dal padre ed esteso tramite un ulteriore rep invariant relativo alla sottoclasse che può accedere a tutti gli attributi privati della sottoclasse e a quelli pubblici o protected del padre.
+
+##### Estensioni NON pure
+
+Se viene modificato una o più specifiche
+
+##### Principio di Liskov
+
+Se S è un sottotipo di T, allora oggetti dichiarati in un programma di tipo T possono essere sostituiti con oggetti di tipo S senza alterare la correttezza dei risultati del programma.
+=> Gli oggetti della sottoclasse devono rispettare il contratto della superclasse
+
+#### Regole di espansione
+
+- **Regola della segnatura (Garantita da Java)**: Firma dei metodi deve essere compatibile (Definisce che il contratto non cambi, verificabile dal compilatore)
+- **Regola dei metodi (Garantito da JML)**: Le chiamate dei metodi al sottotipo devono comportarsi come quelle del supertipo (Verifica che il contratto sia compatibile, non verificabile dal compilatore) (Requires no more, promise no less)
+- **Regola delle proprietà**: I sottotipi devono preservare i public invariant degli oggetti del supertipo (Verifica la specifica nel complesso sia compatibile con quella originale)
+
+##### Regola dei metodi
+
+La precondizione può essere più debole, la postcondizione può essere più forte
+
+**Forte**: Accetta meno casi, la condizione FALSE è la più forte in assoluto (AND fortifica-> Diminuisce i casi)
+**Debole**: Accetta più casi, la condizione TRUE è la condizione più debole (OR indebolisce-> Aumenta i casi)
+
+Es: $x>15$ è più forte di $x>5$, si può scrivere anche che se l'espressione $\alpha$ è più forte dell'espressione $\beta$, allora $\alpha \implies \beta$, poichè se $\alpha$ è verificata, sicuramente lo è anche $\beta$
+Es:$x>15 \implies x>7$
+
+###### Precondizione più debole
+
+Se la precondizione è più debole, allora tutte le chiamate al metodo della superclasse (tipo **statico**) soddisfano la sottoclasse (tipo **dinamico**)$pre_{super}\implies pre_{sub}$
+
+###### Postcondizione più forte
+
+Se la postcondizione è più forte, allora tutte le chiamate al metodo della superclasse (tipo **statico**) hanno la postcondizione soddisfatta poichè soddisfano quella del sottotipo (tipo **dinamico**) $post_{sub}\implies post_{super}$
+
+##### Semantica JML
+
+La sottoclasse eredita pre e postcondizioni dei metodi pubblici e protetti della superclasse e i suoi invarianti, in più ottiene nei metodi che sovrascrive le sequenti estensioni:
+//@also
+//@requires
+//@ensures
+
+La nuova postcondizione viene applicata SSE vale la nuova precondizione
+
+###### Traduzione dei requires ed ensures nella sottoclasse
+
+**requires $pre_{super} || pre_{sotto}$** //requires della sottoclasse indebolita
+**ensures $(pre_{super} \implies post_{super})\ \&\&\ (pre_{sotto} \implies post_{pre})$** //La post condizione della sottoclasse deve valere quando vale la precondizione della superclasse e la postcondizione della superclasse deve valere quando vale la precondizione della superclasse (può essere anche sempre false poichè in AND)
