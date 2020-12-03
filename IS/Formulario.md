@@ -1564,3 +1564,22 @@ La nuova postcondizione viene applicata SSE vale la nuova precondizione
 
 **requires $pre_{super} || pre_{sotto}$** //requires della sottoclasse indebolita
 **ensures $(pre_{super} \implies post_{super})\ \&\&\ (pre_{sotto} \implies post_{pre})$** //La post condizione della sottoclasse deve valere quando vale la precondizione della superclasse e la postcondizione della superclasse deve valere quando vale la precondizione della superclasse (può essere anche sempre false poichè in AND)
+
+## Test del software
+
+Esistono due tipi di test del software:
+
+- In base alla specifica (Black-Box o funzionale): Scritti prima del codice, servono a definire le funzioni attese dal codice
+- In base al codice (test-white o strutturale):Guardo il codice e provo a scrivere i test
+
+### Test strutturale
+
+- Copertura delle istruzioni (statement): **Passo su ogni istruzione almeno 1 volta**
+- Copertura delle decisioni (branch): **Passo almeno 1 volta sia sul ramo True, sia False per ogni branch**
+- Copertura delle condizioni (condition): Verifico ogni condizione elementare all'interno del branch
+- Copertura dei cammini (path): Verifico ogni cammino dall'inizio alla fine
+
+### Grafo controllo di flusso
+
+Traduzione del codice in un flow-chart
+![img](img\flowchart.png)
