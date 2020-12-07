@@ -69,6 +69,7 @@ TODO
 
 ###### Illustrare le principali tipologie di Sistemi Informativi secondo una classificazione organizzativa/di mercato.
 
+TODO: Expand
 Esistono 3 tipologie di sistemi informativi:
 
 - Operazionali: Aiutano un operatore nello svolgere funzioni molto pratiche, quindi per esempio fatture, ordini, etc..
@@ -103,3 +104,5 @@ Si basano sulle 3C:
 ###### Descrivere sinteticamente le principali tendenze evolutive delle applicazioni CRM.
 
 TODO
+
+###### Come è fatto un portafoglio applicativo spaghetti integration e che problemi ha
