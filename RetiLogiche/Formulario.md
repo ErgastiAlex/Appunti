@@ -91,11 +91,30 @@ Passi:
 
 #### Dominanza di riga
 
-TODO
+P1 domina P2 poichè ogni copertura di P2 è coperta anche da P1, in più P1 copre più mintermini
+
+$$
+\begin{array}{l|l|l|l}
+Implicante & 1 & 2  \\
+\hline
+P1 & x & x&  \\
+P2 & x & &  \\
+\end{array}
+$$
 
 #### Dominanza di colonna
 
-TODO
+La colonna 2 domina la colonna 1, poichè, ogni implicante che copre 2 copre anche sicuramente anche 1, quindi, si elimina la colonna 1
+
+$$
+\begin{array}{l|l|l|l}
+Implicante & 1 & 2  \\
+\hline
+P1 & x & x  \\
+P2 & x &  \\
+P3 & x&
+\end{array}
+$$
 
 #### Risoluzione tabella ciclica
 
@@ -122,11 +141,74 @@ $$
 
 ## Quine-McCluskey multifunzione
 
-TODO
+Per la sintesi delle funzioni a più uscita rimane tutto invariato, solo che si aggiunge una maschera di bit che indica a quale funzione fa riferimento
+Es: Un mintermine condiviso da $f_1$ e $f_2$ ma non da $f_3$ avrà come maschera $110$
+Quando si applica il metodo di Quine-McCluskey basterà fare la OR delle maschere degli n-cubi e applicare queste regole tenendo conto della maschera risultante:
+
+- Segno tutti gli implicanti con maschera uguale a quella ottenuta
+- Lascio non segnati (e quindi possibili primi) tutti gli implicanti con maschera diversa
+- Non riporto nella nuova lista gli implicanti con maschera tutta a $0$
+
+### Tabella di copertura
+
+E' importante riporta nella tabella di copertura anche i pesi degli implicanti (numero letterali)
+
+#### Dominanza di riga
+
+Si fa tenendo conto di TUTTE le funzioni ed è applicabile SSE il costo è uguale o minore dell'implicante dominato
+
+#### Dominanza di colonna
+
+Applicabile solo all'interno della funzione
+
+#### Essenzialità
+
+Ogni implicante scelto viene rimosso solo per la singola funzione in cui è stato tolto, ma, il costo **per le altre passa da n a 1**
+
+#### Metodo di Petrik multifunzione
+
+Il metodo di petrik multifunzione si esegue ugualmente a quello singolo, solo che
+$C(F)=\prod_{i} c(f_i)$
+
+#### Calcolo dei letterali finale
+
+Ogni implicante condiviso viene sostituito con una variabile, che si conta come singolo letterale.
+Es:
+$
+p_1=3\ letterali \newline
+p_2=2\ letterali \newline
+p_3=2\ letterali \newline
+f_1=p_1+p_2 \newline
+f_2=p_1+p_3$
+Diventa
+$q_1=p_1 \newline
+f_1=q_1+p_2 \ |letterali=1+2 \newline
+f_2=q_1+p_3 \ |lettarali=1+2 \newline
+letterali_{totali}=3+(1+2)+(1+2)
+$
 
 ## Metodi euristici
 
-TODO
+Ne esistono di due tipi:
+
+- Greedy o Gradient Descending: Trova un minimo locale
+- Simulated Anneling: Accetta un leggero peggioramento sperando in un futuro miglioramento
+  > do
+  > $\Phi$=|F|
+  > F=reduce(F) //Si riducono i cubi secondo un ranking di probabilità di futura aggregazione
+  > F=expand(F) //Si espandono i cubi "migliori" (quelli che hanno il ranking minore rispetto alla probabilità di ridursi )
+  > F=irredundant(F) //Copertura
+  > while (|F|<$\Phi$)
+
+#### Reduce
+
+$\{A,B\}\ \rightarrow \{A,B,C,D\}$
+$C=\overline{x}A$
+$D=xA$
+
+#### Expand
+
+$reduce(xP,x)$ // Espansione nella direzione di x, diventa $P$
 
 ## Componenti
 
@@ -285,19 +367,138 @@ Invertendo $z_0$ con $c_{i,0}$ si ottiene che $x_0+y_0+z_0=(t_0,c_{1,0})$, per o
 
 #### Extra struttura
 
-TODO
+E' importante notare come la struttura del CS riceve sempre 3 input e ha 2 output, che possono a loro volta fare da input per un altro CS o RCA
+$S=X+Y+Z+W$ (4bit)
+<img src="img\cs-rca.png" height=150 />
+$A_T=6 (porte per elemento)*4 (bit)*2(\#cs)+6(porte)*4(bit)(\#FA)$
+$T_D=2(Tempo\ CS)*2(CS)+2(Tempo\ FA)*4(bit)$
 
-## Riduzione macchina completamente definita
+### Moltiplicatore
 
-TODO
+Dati due numeri binari $X:[x_2,x_1,x_0]\ e\ Y:[y_2,y_1,y_0],$ $X*Y$ produce un risultato di $2*n-1$ bit
 
-### Similitudine
+$
+\begin{array}{llllll}
+          &           & x_2      & x_1      & x_0      & * \\
+          &           & y_2      & y_1      & y_0      & = \\
+          \hline
+0         & 0         & x_2*y_0 & x_1*y_0 & x_0*y_0 &   \\
+0         & x_2*y_1 & x_1*y_1 & x_0*y_1 & 0         &   \\
+x_2*y_2 & x_1*y_2 & x_0*y_2 & 0         & 0         &   \\
+\end{array}
+$
 
-TODO
+Tramite una rete ad 1 livello di porte AND è possibile generare ogni prodotto parziale
+<img src="img\moltiplicatore.png" height=200>
+
+=> Per generare tutti i termini da sommare servono $n^2$ porte + il relativo sommatore
+
+## Bistabili
+
+**Bistabile D**
+
+$$
+\begin{array}{|l|l|}
+D & Q^*\\
+\hline
+0 & 0 \\
+1 & 1\\
+\end{array}
+\newline
+Q^*=D
+$$
+
+**Bistabile T**
+
+$$
+\begin{array}{|l|l|}
+T & Q^*\\
+\hline
+0 & Q \\
+1 & \overline{Q}\\
+\end{array}
+\newline[0.1in]
+q^*=\overline{T}*Q+T*\overline{Q}
+\newline[0.1in]
+q^*=T \oplus q
+$$
+
+**Bistabile JK**
+
+$$
+\begin{array}{|l|l|l|}
+J&K & Q^*\\
+\hline
+0&0 & Q \\
+0&1 & 0\\
+1&0 & 1\\
+1&1 & \overline{Q}\\
+\end{array}
+\newline[0.1in]
+q^*=\overline{j}*\overline{k}*Q+j*\overline{k}+j*k*\overline{Q}
+\newline[0.1in]
+q^*=\overline{j}*\overline{k}*Q+j*\overline{k}+j*k*\overline{Q}
+$$
+
+### Tabella di transizione di stato
+
+Descrive $Q^*$ in funzione di $Q$ e $X$ (Solo Mealy)
+
+### Tabella di eccitazione
+
+Dato $Q, Q^*$ quali ingressi devo fornire al bistabile per ottenere quella transizione
+
+### Come si usa?
+
+Si costruisce una mappa di karnaugh dipendente da $Q,X$ che contiene al suo interno i valori del bistabile per ottenere la transizione da $Q$ a $Q^*$ dato $X$
+Si sintetizzano i valori di ingresso-
 
 ## FSA
 
-TODO
+$\{X,Z,S,\sigma_0,\delta,\lambda\}$
+
+### Costruzione FSA con bistabili
+
+1. Specifica che definisce il comportamento di $X$ e $Z$
+2. Costruzione Grafo
+3. Scelta codifica $S$ e $\sigma_0$
+4. Tabella transizione di stato simbolica
+5. Tabella transizione codificata
+6. Scelta Flip-Flop
+7. Codifica funzioni di eccitazione dei bistabili
+
+## Riduzione macchina completamente definita
+
+### Similitudine
+
+$\sigma_1 \sim \sigma_2\ sse\ \forall y\in X^* \lambda^*(\sigma_1,y)=\lambda^*(\sigma_2,y)$
+
+Due stati sono uguali se per qualsiasi stringa di ingresso di $X^*$, hanno la stessa uscita ($\lambda$)
+
+#### Proprietà
+
+##### Transitiva
+
+$\sigma_1 \sim \sigma_2 \land \sigma_2 \sim \sigma_3 \implies \sigma_1\sim\sigma_3$
+
+##### Riflessiva
+
+$\sigma_1 \sim \sigma_1$
+
+##### Simmetrica
+
+$\sigma_1 \sim \sigma_2 \land \sigma_2 \sim \sigma_1$
+
+### Metodo di Paull-Hunger
+
+Note: Si basa sul singolo ingresso
+
+1. $\sigma_1 \not\sim \sigma_2$ se $\exists x\in X\ t.c.\ \lambda(\sigma_1,x)\ !=\lambda(\sigma_2,x)$
+
+2. Se $\forall x \in X \lambda(\sigma_1,x)=\lambda(\sigma_2,x) $
+2.1 Se $\exists x\ t.c.\ \delta(\sigma_1,x)\not\sim\delta(\sigma_2,x) \implies \sigma_1 \not\sim\sigma_2$
+   2.2 Se $\forall x \delta(\sigma_1,x)\sim\delta(\sigma_2,x) \implies \sigma_1\sim\sigma_2$
+   2.3 Anelli di dipendenza => Tutti simili
 
 ### Macchine di Mealy
 
@@ -381,47 +582,40 @@ Passi:
 
 Ricavate tramite la tabella di eccitazione, con un abuso di notazione, considerando e calcolando gli implicanti per valori di stato prossimo ad 1 e moltiplicando gli implicanti che portano in una variazione di $Q$ ($Q$ o $\overline{Q}$) per quella variazione (Vedere T)
 
-**Bistabile D**
+## Contatori
 
-$$
-\begin{array}{|l|l|}
-D & Q^*\\
-\hline
-0 & 0 \\
-1 & 1\\
-\end{array}
-\newline
-Q^*=D
-$$
+Macchine a stati cicliche e senza ingressi, rappresentabili quindi sotto forma di macchine di Moore
 
-**Bistabile T**
+### Proprietà
 
-$$
-\begin{array}{|l|l|}
-T & Q^*\\
-\hline
-0 & Q \\
-1 & \overline{Q}\\
-\end{array}
-\newline[0.1in]
-q^*=\overline{T}*Q+T*\overline{Q}
-\newline[0.1in]
-q^*=T \oplus q
-$$
+- Modulo: Indica la lunghezza della sequenza di conteggio
+- Sequenza
+- No ingressi
+- Sequenza periodica
 
-**Bistabile JK**
+### Progettazione comportamentale
 
-$$
-\begin{array}{|l|l|l|}
-J&K & Q^*\\
-\hline
-0&0 & Q \\
-0&1 & 0\\
-1&0 & 1\\
-1&1 & \overline{Q}\\
-\end{array}
-\newline[0.1in]
-q^*=\overline{j}*\overline{k}*Q+j*\overline{k}+j*k*\overline{Q}
-\newline[0.1in]
-q^*=\overline{j}*\overline{k}*Q+j*\overline{k}+j*k*\overline{Q}
-$$
+La progettazione comportamentale consiste nel realizzare un FSA che indica la sequenza di conteggio (FSA ciclico e senza ingressi)
+
+La tabella di transizione di stato non ha X
+
+#### Progettazione comportamentale con ripetizione
+
+- Disambiguazione: Si aggiungono dei bit per differenziare i vari stati, l'uscita è quindi presa direttamente dai Flip-Flop senza rete combinatoria
+  Es: Due uscite $00$ diventano lo stato $000$ e $100$
+- Aggiunta di rete di transcodifica che codifica lo stato nell'uscita corretta.
+
+### Progettazione strutturale
+
+La progettazione strutturale si basa sul notare che comportamenti abbia un contatore
+$z(t+1)=z(t)+1$
+<br/>
+<img src="img\contatorestrutturale.png" height=150>
+
+#### Progettazione strutturale con modulo $\ne\ 2^k$
+
+<img src="img\contatorestrutturalereset.png" height=150>
+
+#### Progettazione strutturale Up\Down
+
+<img src="img\contatoreupdown.png" height=150>
