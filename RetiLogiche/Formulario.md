@@ -9,6 +9,20 @@ $x+x=x$
 
 Note: Se si sostituisce _ con + e + con _ si ottengono teoremi e formule duali
 
+## Costruzione reti tramite porte logiche NAND e NOR
+
+Applicare con attenzione il teorema di De Morgan
+
+## Porte Logiche
+
+| Porta | #Gate | Mos |
+| ----- | ----- | --- |
+| Not   | 1     | 2   |
+| NOR   | 2     | 4   |
+| NAND  | 2     | 4   |
+| AND   | 3     | 6   |
+| OR    | 3     | 6   |
+
 ## Teorema di Bool-Shannon
 
 $f(x_1,x_2,x_3,...x_n)=x_1*f(1,x_2,x_3,...,x_n)+\overline{x_1}*f(0,x_2,x_3,...,x_n)$
@@ -66,7 +80,7 @@ Passi:
    3.2. Si conclude la costruzione della lista quando non è più possibile accoppiare elementi
 4. Tutti gli elementi non segnati sono implicanti primi (essenziali, ridondanti e ridondanti secondari)
 
-### Metodo di Petrik
+### Tabella di copertura
 
 Si costruisca una tabella che ha come colonne tutti gli elementi dell'On-Set e come righe gli implicanti primi, si indichi con una x i valori coperti da un implicante. Es:
 
@@ -88,6 +102,14 @@ Passi:
 3. Si risolvono eventuali dominanze di righe e colonna
 4. Si identificano eventuali nuovi implicanti "primi" notati tramite dominanze e si risvolge il punto 2
 5. Si ottiene la copertura totale (allora fine) oppure una tabella ciclica (No implicanti primi, ma solo ridondanti secondari)
+
+#### Tabella per minimizzare il costo degli implicanti
+
+Ogni implicante **costa $1$ e il suo costo passa a $0$** una volta che viene usato
+
+#### Tabella per minimizzare il costo dei letterali
+
+Ogni implicante **costa $n$ e il suo costo passa a $1$** una volta che viene usato
 
 #### Dominanza di riga
 
@@ -619,3 +641,26 @@ $z(t+1)=z(t)+1$
 #### Progettazione strutturale Up\Down
 
 <img src="img\contatoreupdown.png" height=150>
+
+### Contatori veloci
+
+#### Johnson (Bistabile D)
+
+<img src="img\contatoreJohnson.png">
+
+Sequenza:
+100
+010
+001
+
+#### Moebius
+
+<img src="img\contatoreMoebius.png">
+
+Sequenza
+000
+100
+110
+111
+011
+001
