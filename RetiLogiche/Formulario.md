@@ -7,7 +7,7 @@ $x+\overline{x}y=x+y$
 $x+xy=x$
 $x+x=x$
 
-Note: Se si sostituisce _ con + e + con _ si ottengono teoremi e formule duali
+Note: Se si sostituisce \* con + e + con \* si ottengono teoremi e formule duali
 
 ## Costruzione reti tramite porte logiche NAND e NOR
 
@@ -399,7 +399,7 @@ $T_D=2(Tempo\ CS)*2(CS)+2(Tempo\ FA)*4(bit)$
 
 Dati due numeri binari $X:[x_2,x_1,x_0]\ e\ Y:[y_2,y_1,y_0],$ $X*Y$ produce un risultato di $2*n-1$ bit
 
-$
+$$
 \begin{array}{llllll}
           &           & x_2      & x_1      & x_0      & * \\
           &           & y_2      & y_1      & y_0      & = \\
@@ -408,7 +408,7 @@ $
 0         & x_2*y_1 & x_1*y_1 & x_0*y_1 & 0         &   \\
 x_2*y_2 & x_1*y_2 & x_0*y_2 & 0         & 0         &   \\
 \end{array}
-$
+$$
 
 Tramite una rete ad 1 livello di porte AND è possibile generare ogni prodotto parziale
 <img src="img\moltiplicatore.png" height=200>
