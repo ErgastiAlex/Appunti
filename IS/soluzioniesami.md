@@ -403,13 +403,13 @@ public class Rettangolo{
     private double height;
     private double width;
 
-    //@private invariant this.height==Heigth() && this.width==Width()
-    public Height(){...}
-    public Width(){...}
+    //@private invariant this.height==getHeight() && this.width==getWidth()
+    public double getHeight(){...}
+    public double getWidth(){...}
 
-    //@requires newWidth>0 && newWidth!=Height()
-    //@ensures Width()=newWidth
-    public void cambiaLarghezza(int newWidth){
+    //@requires newWidth>0 && newWidth!=getHeight()
+    //@ensures getWidth()=newWidth
+    public void cambiaLarghezza(double newWidth){
     }
 ```
 
@@ -481,7 +481,8 @@ foo("a",2)
 foo("b",1)
 foo("a",1)
 
-Non è possibile eseguire il ciclo while 2 volte, infatti se viene fornito un valore di v>1 (2,3...) si ottiene che v viene messo =0 ed esce sempre dal while, quindi, l'unico valore assegnabile a v per eseguire il ciclo while è 1, ma così facendo il ciclo viene eseguito solo 1 volta.
+Test a: foo("bcde", 2) return "non trovato"
+Test b: foo("bac", 3) return "trovato"
 
 # 4 Febbraio 2020
 
