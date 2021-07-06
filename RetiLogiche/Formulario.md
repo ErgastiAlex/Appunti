@@ -247,7 +247,20 @@ Note: Richiede 3 porte per bit poichè ci sono 2 AND + 1 OR per scegliere tra il
 
 ### Decoder
 
-TODO
+
+<img src="img\decoder.png" height=100/>
+
+#### Info
+| $Y0=\overline{X}$ <br> $Y1=X$ |
+| ---------------------- | ------------------------------ |
+
+<img src="img\decoder2.png" height=100/>
+
+#### Info
+
+| $Y0=\overline{X0*X1}$ <br> $Y1=\overline{X0}*X1$ <br> $Y2=X0*\overline{X1}$<br> $Y3=X0*X1$| $T_D=1$ <br> $\#Porte=\#uscite$ |
+| ---------------------- | ------------------------------ |
+
 
 ### Half Adder
 
