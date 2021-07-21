@@ -1,5 +1,34 @@
 # Domande Sistemi Informativi
 
+###### Illustrare il concetto di stratificazione dei protocolli nelle reti di comunicazione.
+
+Durante l'evoluzione la progettazione delle reti si è dovuto fare fronte a una continua evoluzione tecnologica. Per creare una rete il più possibile verasile si è passati a una stratificazione dove ogni livello semplifica le operazioni a quello successivo.
+Dal basso abbiamo:
+- livello fisico: si intende tutto ciò che collega fisicamente due host.
+- data link: gestisce l'organizzazione dei dati per eesere trasmessi sulla rete fisica.
+- rete: si occupa dell'indirizzamento e instradamento dei pacchetti.
+- trasporto: definisce direttive per trasportare le informazioni in modo affidabile.
+- sessione: stabilisce la creazione di sessioni di comunicazione tra 2 host.
+- presentazione: converte i vari tipi di rappresentazione per essere compresi della diverse macchine.
+- applicativo: specifica come ogni singola applicazione utilizza la rete per scambiare dati.
+
+Lo standard più usato è TCP/IP che semplifica lo stack ISO/OSI in 5 livelli:
+- fisico
+- linea
+- rete
+- trasporto
+- applicativo
+
+###### Descrivere le caratteristiche degli schemi a stella e fiocco di neve nella progettazione di DataWarehouse, evidenziando le differenze rispetto agli schemi tradizionali di gestione dei dati in un database.
+I database usati nei DataWarehouse devono essere ottimizzati per l'accesso rapido ai dati durante una analisi.
+per questo solitamente si utilizza un sistema a stella dove si pone al centro una "fact table" che contiene gli elementi da registare.
+i rami della stella sono le dimensioni che si utilizzano poi per fare l'aggregazione dei dati durante l'analisi.
+quando il database è molto gerarchico si avrebbero delle dimensioni che crescono in dimensione e quaindi si tenda a passare a una struttura "snowflake" che assomiglia di più a un database entità-renalzione standard.
+
+###### Illustrare sinteticamente il concetto di “commoditizzazione delle ICT”.
+Con l'avanzare tecnologico di sistemi informatici e reti di comunicazione i sistemi ICT hanno evidenziato caratteristiche simili a quelle delle "comodty", ovvero una elevata standardizzazione, un alta facilità di replicazione data dal fatto che i dati sono per definizione al risosrsa più replicabile, una facilitò di distribuzione che è superiore a qualunque prodotto e una riduzione dei costi.
+Tutto questo ha portato sempre di più a considerare questi sitemi con un vero e prorpio prodotto e a fare nascere un mercato dell'ICT.
+
 ###### Descrivere le differenze fra WAN,MAN,LAN e PAN
 
 - PAN (Personal Area Network): Si intende quella rete basata su dispositivi vicini a una persona, come smartphone, smartwatch o simile. Utilizza principalmente tecnologie come Bluetooth, RFID o ZigBee
@@ -30,7 +59,12 @@ Le tecnologie tradizionali falliscono nei progetti IT a causa di varie caratteri
 
 ###### Descrivere fornendo un esempio cosa si intenda per cubo multi-dimensionale nelle analisi OLAP (Online Analytical Processing).
 
-TODO
+Nelle analisi OLAP si organizzano i dati in cubi multidimensionali ponento una determinata dimensione su ogni asse di riferimento.
+a questo punto si puù procedere con i vari tipi di analisi che ripicamente sono:
+- slice: ovvero si taglia un il cubo per fissare una misura specifica di una dimensione.
+- drill down/up: si prende una misura e da quella si analizzano tutte le altre dimensioni.
+- drill across: si analizza passando attraverso le varie misure di una dimansione.
+- rotazione: tipica analisi dove si ruota l'aggregazione.
 
 ###### La società che ha realizzato l’applicazione YOUP (vedi Domanda n. 1) gestisce il sistema attraverso propri server, ospitati in una propria infrastruttura. A quali problemi di sicurezza informatica dovrà fare attenzione e perché?
 
@@ -47,11 +81,13 @@ I requisiti non funzionali descrivono proprietà del sistema e si raggruppano in
 
 ###### Illustrare il significato di portafoglio applicativo e spiegare l’utilità dell’integrazione fra portafoglio applicativo e diagramma dei processi (per es. modellato attraverso la catena del valore di Porter).
 
-TODO
+Per portafoglio applicativo si intende l'insieme di software che un'azienda usa per lavoare. solitamente un portafoglio applicativo molto vasto è sintomo di un'azienda con un sistema nformativo poco strtturato e organizzato.
+spsso si integra con il diagramma dei processi in modo da rendere evidente in quale momento del processo produttivo viene utlizzato ogni pacchetto applicativo.
 
 ###### Descrivere sinteticamente, ed eventualmente attraverso esempi, la differenza fra steganografia e crittografia nella comunicazione di messaggi segreti.
 
-TODO
+- steganografia : nascondere informazioni in un oggetto (fisico o non) per trasmetterle senza che vengano riconosciute.
+- crittogrfia: cambiare le informazioni in modo che solo mittente e destinatario riescano a capirla.
 
 ###### Illustrare sinteticamente le principali caratteristiche delle tecnologie di comunicazione wireless utilizzate per distanze limitate (reti LAN/PAN).
 
@@ -65,7 +101,7 @@ Nelle reti LAN invece viene utilizzato il Wi-Fi, necessità di un hotspot, ovver
 
 ###### Illustrare sinteticamente le principali ragioni ed i fenomeni (sia tecnologici che di mercato) che hanno consentito l’evoluzione delle architetture dei Sistemi Informativi da quelle centralizzate a quelle distribuite.
 
-TODO
+I costi esorbitanti della tecnologia all'inizio portavano a costruire ochi sistemi centralizzati. Con la necessità di avere però un sistema di controllo molto rapido le aziende hanno iniziato a portare questi sistemi sempre più vicini a loro fino ad arrivare ad avere sistemi minuscoli e molto economci che controllino ogni aspetto del processo produttivo.
 
 ###### Illustrare le principali tipologie di Sistemi Informativi secondo una classificazione organizzativa/di mercato.
 
@@ -103,6 +139,8 @@ Si basano sulle 3C:
 
 ###### Descrivere sinteticamente le principali tendenze evolutive delle applicazioni CRM.
 
-TODO
+i sistemi CRM servono alle aziende per comunicare in modo efficace ed efficente con i clienti. spesso questi sistemi sono integrati negli ERP come moduli di base o aggiuntivi.
+Con l'avanzare della tecnologia si è passati dal call center a spostare il sistema online con chat.
+il trend è ora di spotare il sistema sui social e se possibile aggiungere dei chatbot che provino a risolvere i problemi più basilari o indirizzare al reparto corretto il cliente.
 
 ###### Come è fatto un portafoglio applicativo spaghetti integration e che problemi ha

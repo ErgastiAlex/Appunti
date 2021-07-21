@@ -8,7 +8,7 @@
 //@requires nums!=null && n>0 &&
 //@n<nums.length &&
 //@(\forall int i;0<=i && i<= nums.length;
-//@ !(\exists int k,0<=k && k<nums.length && k!=i;nums[i]!=nums[k]))
+//@ !(\exists int k,0<=k && k<nums.length && k!=i;nums[i]==nums[k]))
 
 //@ensures \result <==> (\forall int i;0<=i && i<n;
 //@(\forall int k;n<= k && k<nums.length; nums[i]<nums[k]))
@@ -19,7 +19,7 @@
 ```Java
 //@requires n>0 && n<nums.length &&
 //(@\forall int i;0<=i && i<= nums.length;
-//@ !(\exists int k,0<=k && k<nums.length && k!=i;nums[i]!=nums[k]))
+//@ !(\exists int k,0<=k && k<nums.length && k!=i;nums[i]==nums[k]))
 //@ensures nums!= null &&
 //@ \result<==> (\forall int i;0<=i && i<n;
 //@ (\forall int k;n<= k && k<nums.length; nums[i]<nums[k]))
@@ -31,8 +31,10 @@
 ```Java
 public NumeroBinario somma(NumeroBinario n){
     int dim=Math.max(this.dimensione(),n.dimensione());
-    if(this.dimensione()==n.dimensione())
+    if(this.dimensione()==n.dimensione()){
         dim++; //bit di overflow
+    }
+    
 
     Iterator<Integer> iter1=this.destraSinistra();
     Iterator<Integer> iter2=n.destraSinistra();
@@ -95,8 +97,10 @@ public boolean simmetrico(){
     Iterator<Integer> rightLeft=nd.sinistraDestra();
 
     while(index<dim/2){
-        if(leftRight.next()!=rightLeft.next())
+        if(leftRight.next()!=rightLeft.next()){
             return false;
+        }
+        index++;
     }
     return true;
 }
@@ -121,8 +125,8 @@ Si evince subito che se FilmMuto fosse superclasse la postcondizione risultante 
 ## Es 4
 
 ```Java
-public static List<String> startWithA(List<String> list){
-    return list.stream().filter(x->x.charAt(0)='a').collect(Collections.toList());
+public static int startWithA(List<String> list){
+    return (int)list.stream().filter(x->x.startsWith("a").count();
 }
 ```
 
@@ -159,6 +163,21 @@ La risposta attesa sarebbe rettangolo, quella ricevuta è però "altroParallelog
 
 ## Es1
 
+```Java
+//@requires ai!=null && n>0
+//@ensures (\forall int i;0<=i && i<=\result.size();
+//@(\exist int k; 0<=k && k<=ai.size(); \result.get(i)==ai.get(k)) && 
+//@n<=(\num_of int x;0<=x && <=ai.size();ai.get(x)==\result.get(i)) &&
+//@!(\exist int m;0<=m && m<=\result.size();\result.get(i)==\result.get(m)))
+public static ArrayList<Integer> m1(ArrayList<Integer> a1,int n);
+//@requires a1!=null && a1.length>1
+//@ensures \result <==> (\forall int x;0<=x && x<=a1.length-1;a1[i]<=a1[i+1])
+public static boolean m2(char[] a1);
+//@requires sArr!=null && s!=null
+//@assignable sArr
+//@ensures \forall int x;0<=x && x<=\old(sArr.size); \old(sArr[x].charAt(0))==s.charAt(0) && \exist int m; 0<=m && m<=sArr.size;s == sArr[m];
+public static void m3(String[] sArr, String s)
+```
 ```Java
 //@assignable \nothing
 //@requires a1!=null && n>0

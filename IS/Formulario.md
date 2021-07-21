@@ -393,17 +393,17 @@ public class Fibonacci implements Iterator<Integer>{
   }
   public boolean hasNext(){
     return true;
+  }
+  public Integer next(){
+    if(prev2=0){
+      prev2=1;
+      return 0;
     }
-    public Integer next(){
-      if(prev2=0){
-        prev2=1;
-        return 0;
-      }
-      int nextFib=prev1+prev2;
-      prev1=prev2;
-      prev2=tmp;
-      return nextFib;
-    }
+    int nextFib=prev1+prev2;
+    prev1=prev2;
+    prev2=nextFib;
+    return nextFib;
+  }
 }
 ```
 
@@ -416,7 +416,7 @@ public class GenericsClass<T> implements Iterable<T>{
   public Iterator<T> iterator(){
     return this.new CustomIterator();
   }
-  private class CustomIterator implemets Iterator<T>{ //Inner class
+  private class CustomIterator implements Iterator<T>{ //Inner class
 
         @Override
         public boolean hasNext() {
@@ -525,7 +525,7 @@ Metodi intermedi (restituisce uno stream):
 - map(Function\<T,R>)
   Metodi terminali:
 
-- collect(Collectors): Si usano Collectors.toList, Collectors.toSet...
+- collect(Collectors): Si usano Collections.toList, Collections.toSet...
 - forEach(Consumer\<T>)
 - reduce(BiFunction\<A,T,R>) //A:Accumulator, T:Value, R:Return
 
@@ -575,7 +575,7 @@ public class ProvaThread {
     MyThread t1;
     t1 = new MyThread();
     t1.start();
-}
+  }
 }
 ```
 
@@ -1111,7 +1111,7 @@ Violazione dei principi di programmazione
 
 ## Pattern
 
-- Schemi di soluzioni riutilizzabili -> Permettono di non riinvetare la ruota.
+- Schemi di soluzioni riutilizzabili -> Permettono di non reinvetare la ruota.
 - Potrebbero creare un overhead eccessivo su un progetto
 
 Tipologie:
